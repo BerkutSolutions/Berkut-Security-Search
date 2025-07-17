@@ -33,13 +33,17 @@ def index():
         query_embedding = model.encode(query, convert_to_tensor=True)
         
         # Проверяем сходство с каждым материалом
+        matches = []
         for material_id, date, material_text in materials:
             material_embedding = model.encode(material_text, convert_to_tensor=True)
             similarity = util.cos_sim(query_embedding, material_embedding).item()
             
-            # Если сходство выше порога (например, 0.7), считаем запрос запрещённым
+            # Если сходство выше порога (0.7), добавляем в список совпадений
             if similarity > 0.7:
-                return render_template('index.html', warning=f"Запрос запрещён! Найден запрещённый материал (ID: {material_id}, Дата: {date}). Причина: {material_text}")
+                matches.append((material_id, date, material_text))
+        
+        if matches:
+            return render_template('index.html', warning=matches, query=query)
         
         # Если запрос безопасен, перенаправляем на Google
         return redirect(f"https://www.google.com/search?q={query}")
