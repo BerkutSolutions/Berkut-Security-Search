@@ -143,9 +143,8 @@ def index():
         conn.close()
         
         if matches:
-            material_id, date, material_text = matches[0]
-            logger.warning(f"Найден запрещённый материал ID {material_id} для запроса '{query}'")
-            return render_template('index.html', warning=f"Запрос запрещён! Найден запрещённый материал (ID: {material_id}, Дата: {date}). Причина: {material_text}", query=query)
+            logger.warning(f"Найдено {len(matches)} запрещённых материалов для запроса '{query}'")
+            return render_template('index.html', warning=matches, query=query)
         
         logger.info(f"Запрос '{query}' безопасен")
         return render_template('index.html', safe_query=query)
