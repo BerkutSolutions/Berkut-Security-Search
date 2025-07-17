@@ -138,7 +138,7 @@ def index():
         conn = sqlite3.connect(r'C:\Users\berkut\Desktop\search\restricted.db')
         cursor = conn.cursor()
         # Используем FTS5 для поиска
-        cursor.execute('SELECT id, date, material FROM restricted_materials_fts WHERE material MATCH{ml-0} MATCH ?', (query,))
+        cursor.execute('SELECT id, date, material FROM restricted_materials_fts WHERE material MATCH ?', (query,))
         matches = cursor.fetchall()
         conn.close()
         
