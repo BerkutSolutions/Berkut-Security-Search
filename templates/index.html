@@ -6,7 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Безопасный поиск</title>
+    <title>Berkut Security Search</title>
+    <link rel="icon" type="image/svg+xml" href="https://www.svgrepo.com/show/532553/search.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -19,7 +20,7 @@
         }
         /* Стили для тёмной темы */
         .text-gray-800 {
-            color: #e5e7eb;
+            color: #e5e7eb; /* Почти белый для заголовков */
         }
         .text-gray-600 {
             color: #d1d5db;
@@ -41,6 +42,10 @@
         .search-icon {
             width: 24px;
             height: 24px;
+        }
+        /* Зелёный цвет для безопасного запроса */
+        .safe-text {
+            color: #22c55e;
         }
     </style>
     <script>
@@ -78,7 +83,7 @@
 </head>
 <body class="min-h-screen flex flex-col transition-colors duration-300">
     <div class="container mx-auto px-4 py-8 flex-grow">
-        <h1 class="text-3xl font-bold text-center text-gray-200 mb-6">Безопасный поиск</h1>
+        <h1 class="text-3xl font-bold text-center text-gray-200 mb-6">Berkut Security Search</h1>
         
         <form id="search-form" class="max-w-xl mx-auto" method="POST" action="/">
             <div class="flex items-center space-x-2">
@@ -93,13 +98,13 @@
         </div>
 
         {% if warning %}
-            <div class="mt-6 p-4 bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 rounded-md max-w-xl mx-auto">
+            <div class="mt-6 p-4 bg-red-900/50 text-red-300 rounded-md max-w-xl mx-auto">
                 {{ warning | safe }}
             </div>
         {% endif %}
 
         {% if safe_query %}
-            <div class="mt-6 p-4 bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 rounded-md max-w-xl mx-auto">
+            <div class="mt-6 p-4 bg-green-900/50 safe-text rounded-md max-w-xl mx-auto">
                 Запрос "{{ safe_query }}" безопасен!
                 <div class="mt-4 flex space-x-4 justify-center">
                     <a href="https://www.google.com/search?q={{ safe_query | urlencode }}" class="p-2 search-btn rounded-md transition" title="Поиск в Google">
