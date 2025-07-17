@@ -13,7 +13,7 @@ model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
 
 # Функция для получения данных из базы
 def get_restricted_materials():
-    conn = sqlite3.connect(r'C:\Users\berkut\Desktop\search\restricted.db')
+    conn = sqlite3.connect('./restricted.db')
     cursor = conn.cursor()
     cursor.execute('SELECT id, date, material FROM restricted_materials')
     materials = cursor.fetchall()
