@@ -6,10 +6,10 @@ import sqlite3
 
 def init_db():
     # Читаем CSV файл
-    df = pd.read_csv(r'C:\Users\berkut\Desktop\search\fs_em.csv', encoding='utf-8')
+    df = pd.read_csv('./fs_em.csv', encoding='utf-8')
     
     # Подключаемся к SQLite
-    conn = sqlite3.connect(r'C:\Users\berkut\Desktop\search\restricted.db')
+    conn = sqlite3.connect('./restricted.db')
     cursor = conn.cursor()
     
     # Создаём таблицу
