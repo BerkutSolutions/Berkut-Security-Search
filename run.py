@@ -27,7 +27,7 @@ def init_db():
         content = None
         for encoding in encodings:
             try:
-                with open(r'C:\Users\berkut\Desktop\search\fs_em.txt', 'r', encoding=encoding) as f:
+                with open('./fs_em.txt', 'r', encoding=encoding) as f:
                     content = f.read()
                 logger.info(f"Успешно прочитан файл с кодировкой: {encoding}")
                 break
@@ -55,7 +55,7 @@ def init_db():
                 logger.warning(f"Не удалось разобрать запись: {entry[:50]}...")
         
         # Подключаемся к SQLite
-        conn = sqlite3.connect(r'C:\Users\berkut\Desktop\search\restricted.db')
+        conn = sqlite3.connect('./restricted.db')
         cursor = conn.cursor()
         
         # Создаём таблицу FTS5
@@ -108,7 +108,7 @@ def progress(query):
             yield "data: {'progress': 100, 'found': false}\n\n"
             return
         logger.debug(f"Прогресс для запроса: {normalized_query}")
-        conn = sqlite3.connect(r'C:\Users\berkut\Desktop\search\restricted.db')
+        conn = sqlite3.connect('./restricted.db')
         cursor = conn.cursor()
         cursor.execute('SELECT id, date, material FROM restricted_materials')
         materials = cursor.fetchall()
@@ -135,7 +135,7 @@ def index():
         logger.info(f"Получен запрос: {query}")
         
         # Поиск в базе с помощью FTS5
-        conn = sqlite3.connect(r'C:\Users\berkut\Desktop\search\restricted.db')
+        conn = sqlite3.connect('./restricted.db')
         cursor = conn.cursor()
         # Используем FTS5 для поиска
         cursor.execute('SELECT id, date, material FROM restricted_materials_fts WHERE material MATCH ?', (query,))
