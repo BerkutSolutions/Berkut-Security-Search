@@ -1,0 +1,123 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. -->
+<!-- If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Безопасный поиск</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: linear-gradient(to bottom right, #1f2937, #111827);
+        }
+        .no-select {
+            user-select: none;
+        }
+        /* Стили для тёмной темы */
+        .text-gray-800 {
+            color: #e5e7eb;
+        }
+        .text-gray-600 {
+            color: #d1d5db;
+        }
+        .bg-white {
+            background-color: #1f2937;
+        }
+        .border-gray-300 {
+            border-color: #4b5563;
+        }
+        /* Стили для кнопок поисковиков */
+        .search-btn {
+            background-color: #4b5563;
+        }
+        .search-btn:hover {
+            background-color: #374151;
+        }
+        /* Стили для SVG-иконок */
+        .search-icon {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
+    <script>
+        // Логика прогресс-бара
+        document.addEventListener('DOMContentLoaded', () => {
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const searchForm = document.getElementById('search-form');
+            const queryInput = document.getElementById('query');
+
+            searchForm.addEventListener('submit', () => {
+                const query = queryInput.value;
+                if (query) {
+                    progressText.classList.remove('hidden');
+                    progressBar.classList.remove('hidden');
+                    const source = new EventSource(`/progress/${encodeURIComponent(query)}`);
+                    source.onmessage = (event) => {
+                        const data = JSON.parse(event.data);
+                        progressBar.value = data.progress;
+                        if (data.progress >= 100) {
+                            source.close();
+                            if (!data.found) {
+                                progressText.textContent = 'Поиск завершён!';
+                            }
+                        }
+                    };
+                    source.onerror = () => {
+                        source.close();
+                        progressText.textContent = 'Ошибка при проверке!';
+                    };
+                }
+            });
+        });
+    </script>
+</head>
+<body class="min-h-screen flex flex-col transition-colors duration-300">
+    <div class="container mx-auto px-4 py-8 flex-grow">
+        <h1 class="text-3xl font-bold text-center text-gray-200 mb-6">Безопасный поиск</h1>
+        
+        <form id="search-form" class="max-w-xl mx-auto" method="POST" action="/">
+            <div class="flex items-center space-x-2">
+                <input type="text" id="query" name="query" class="w-full p-3 rounded-l-md border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите запрос..." required>
+                <button type="submit" class="p-3 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 transition">Поиск</button>
+            </div>
+        </form>
+
+        <div class="mt-4 max-w-xl mx-auto">
+            <p id="progress-text" class="text-center text-gray-600 hidden">Поиск выполняется...</p>
+            <progress id="progress-bar" class="w-full h-2 rounded-full hidden" value="0" max="100"></progress>
+        </div>
+
+        {% if warning %}
+            <div class="mt-6 p-4 bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 rounded-md max-w-xl mx-auto">
+                {{ warning | safe }}
+            </div>
+        {% endif %}
+
+        {% if safe_query %}
+            <div class="mt-6 p-4 bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 rounded-md max-w-xl mx-auto">
+                Запрос "{{ safe_query }}" безопасен!
+                <div class="mt-4 flex space-x-4 justify-center">
+                    <a href="https://www.google.com/search?q={{ safe_query | urlencode }}" class="p-2 search-btn rounded-md transition" title="Поиск в Google">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg" class="search-icon" alt="Google">
+                    </a>
+                    <a href="https://yandex.com/search/?text={{ safe_query | urlencode }}" class="p-2 search-btn rounded-md transition" title="Поиск в Yandex">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Yandex_icon.svg" class="search-icon" alt="Yandex">
+                    </a>
+                    <a href="https://duckduckgo.com/?q={{ safe_query | urlencode }}" class="p-2 search-btn rounded-md transition" title="Поиск в DuckDuckGo">
+                        <img src="https://www.svgrepo.com/show/353679/duckduckgo.svg" class="search-icon" alt="DuckDuckGo">
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <footer class="text-center py-4 text-gray-600 no-select">
+        Powered by BerkutSolutions
+    </footer>
+</body>
+</html>
