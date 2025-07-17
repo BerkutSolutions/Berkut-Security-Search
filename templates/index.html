@@ -8,48 +8,144 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Berkut Security Search</title>
     <link rel="icon" type="image/svg+xml" href="https://www.svgrepo.com/show/532553/search.svg">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-image: linear-gradient(to bottom right, #1f2937, #111827);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #1a202c;
+            color: #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
         }
-        .no-select {
-            user-select: none;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            flex-grow: 1;
         }
-        /* Стили для тёмной темы */
-        .text-gray-800 {
-            color: #e5e7eb; /* Почти белый для заголовков */
+        h1 {
+            text-align: center;
+            color: #e5e7eb;
+            margin-bottom: 20px;
         }
-        .text-gray-600 {
-            color: #d1d5db;
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            max-width: 36rem; /* 576px, фиксированная ширина */
+            width: 36rem; /* Фиксированная ширина */
+            margin-left: auto;
+            margin-right: auto;
         }
-        .bg-white {
-            background-color: #1f2937;
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #4b5563;
+            border-radius: 4px 0 0 4px;
+            background-color: #2d3748;
+            color: #e2e8f0;
+            font-size: 16px;
+            width: 28rem; /* Фиксированная ширина поля ввода, оставляя место для кнопки */
+            box-sizing: border-box;
         }
-        .border-gray-300 {
-            border-color: #4b5563;
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            background-color: #3182ce;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
         }
-        /* Стили для кнопок поисковиков */
-        .search-btn {
-            background-color: #4b5563;
+        button:hover {
+            background-color: #2b6cb0;
         }
-        .search-btn:hover {
-            background-color: #374151;
+        .progress-container {
+            text-align: center;
+            margin-bottom: 20px;
+            max-width: 36rem; /* 576px, фиксированная ширина */
+            width: 36rem; /* Фиксированная ширина */
+            margin-left: auto;
+            margin-right: auto;
         }
-        /* Стили для SVG-иконок */
-        .search-icon {
+        .progress-text {
+            display: none;
+            color: #a0aec0;
+        }
+        progress {
+            width: 100%;
+            height: 10px;
+            display: none;
+        }
+        .warning {
+            background-color: rgba(229, 62, 62, 0.2);
+            padding: 15px;
+            border-radius: 4px;
+            color: #feb2b2;
+            margin-bottom: 20px;
+            max-width: 36rem; /* 576px, фиксированная ширина */
+            width: 36rem; /* Фиксированная ширина */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .safe {
+            background-color: rgba(56, 161, 105, 0.2);
+            padding: 15px;
+            border-radius: 4px;
+            color: #22c55e;
+            margin-bottom: 20px;
+            text-align: center;
+            max-width: 36rem; /* 576px, фиксированная ширина */
+            width: 36rem; /* Фиксированная ширина */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .safe a {
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        .safe img {
             width: 24px;
             height: 24px;
+            vertical-align: middle;
         }
-        /* Зелёный цвет для безопасного запроса */
-        .safe-text {
-            color: #22c55e;
+        footer {
+            text-align: center;
+            padding: 10px;
+            color: #a0aec0;
+            user-select: none;
+        }
+        mark {
+            background-color: #fef08a; /* Жёлтый фон для выделения */
+            color: #1a202c;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+        details {
+            margin-bottom: 1rem;
+            max-width: 36rem; /* 576px, фиксированная ширина */
+            width: 36rem; /* Фиксированная ширина */
+        }
+        summary {
+            cursor: pointer;
+            font-weight: 500;
+            color: #e2e8f0;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        details[open] summary {
+            color: #e5e7eb;
+        }
+        .warning-text {
+            padding: 10px;
+            max-width: 36rem; /* 576px, фиксированная ширина */
+            width: 36rem; /* Фиксированная ширина */
+            box-sizing: border-box;
         }
     </style>
     <script>
-        // Логика прогресс-бара
         document.addEventListener('DOMContentLoaded', () => {
             const progressBar = document.getElementById('progress-bar');
             const progressText = document.getElementById('progress-text');
@@ -59,8 +155,8 @@
             searchForm.addEventListener('submit', () => {
                 const query = queryInput.value;
                 if (query) {
-                    progressText.classList.remove('hidden');
-                    progressBar.classList.remove('hidden');
+                    progressText.style.display = 'block';
+                    progressBar.style.display = 'block';
                     const source = new EventSource(`/progress/${encodeURIComponent(query)}`);
                     source.onmessage = (event) => {
                         const data = JSON.parse(event.data);
@@ -78,51 +174,57 @@
                     };
                 }
             });
+
+            // Подсветка ключевых слов
+            const query = "{{ query | safe }}";
+            if (query) {
+                const warningElements = document.querySelectorAll('.warning-text');
+                warningElements.forEach(element => {
+                    const regex = new RegExp(`(${query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')})`, 'gi');
+                    element.innerHTML = element.innerHTML.replace(regex, '<mark>$1</mark>');
+                });
+            }
         });
     </script>
 </head>
-<body class="min-h-screen flex flex-col transition-colors duration-300">
-    <div class="container mx-auto px-4 py-8 flex-grow">
-        <h1 class="text-3xl font-bold text-center text-gray-200 mb-6">Berkut Security Search</h1>
+<body>
+    <div class="container">
+        <h1>Berkut Security Search</h1>
         
-        <form id="search-form" class="max-w-xl mx-auto" method="POST" action="/">
-            <div class="flex items-center space-x-2">
-                <input type="text" id="query" name="query" class="w-full p-3 rounded-l-md border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите запрос..." required>
-                <button type="submit" class="p-3 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 transition">Поиск</button>
-            </div>
+        <form id="search-form" method="POST" action="/">
+            <input type="text" id="query" name="query" placeholder="Введите запрос..." required>
+            <button type="submit">Поиск</button>
         </form>
 
-        <div class="mt-4 max-w-xl mx-auto">
-            <p id="progress-text" class="text-center text-gray-600 hidden">Поиск выполняется...</p>
-            <progress id="progress-bar" class="w-full h-2 rounded-full hidden" value="0" max="100"></progress>
+        <div class="progress-container">
+            <p id="progress-text" class="progress-text">Поиск выполняется...</p>
+            <progress id="progress-bar" value="0" max="100"></progress>
         </div>
 
         {% if warning %}
-            <div class="mt-6 p-4 bg-red-900/50 text-red-300 rounded-md max-w-xl mx-auto">
-                {{ warning | safe }}
+            <div class="warning">
+                <p><strong>Найдены запрещённые материалы:</strong></p>
+                {% for material_id, date, material_text in warning %}
+                    <details>
+                        <summary>Найдено упоминание в записи № {{ material_id }}</summary>
+                        <p class="warning-text">ID: {{ material_id }}, Дата: {{ date }}<br>Причина: {{ material_text | safe }}</p>
+                    </details>
+                {% endfor %}
             </div>
         {% endif %}
 
         {% if safe_query %}
-            <div class="mt-6 p-4 bg-green-900/50 safe-text rounded-md max-w-xl mx-auto">
+            <div class="safe">
                 Запрос "{{ safe_query }}" безопасен!
-                <div class="mt-4 flex space-x-4 justify-center">
-                    <a href="https://www.google.com/search?q={{ safe_query | urlencode }}" class="p-2 search-btn rounded-md transition" title="Поиск в Google">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg" class="search-icon" alt="Google">
-                    </a>
-                    <a href="https://yandex.com/search/?text={{ safe_query | urlencode }}" class="p-2 search-btn rounded-md transition" title="Поиск в Yandex">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Yandex_icon.svg" class="search-icon" alt="Yandex">
-                    </a>
-                    <a href="https://duckduckgo.com/?q={{ safe_query | urlencode }}" class="p-2 search-btn rounded-md transition" title="Поиск в DuckDuckGo">
-                        <img src="https://www.svgrepo.com/show/353679/duckduckgo.svg" class="search-icon" alt="DuckDuckGo">
-                    </a>
+                <div>
+                    <a href="https://www.google.com/search?q={{ safe_query | urlencode }}"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg" alt="Google"></a>
+                    <a href="https://yandex.com/search/?text={{ safe_query | urlencode }}"><img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Yandex_icon.svg" alt="Yandex"></a>
+                    <a href="https://duckduckgo.com/?q={{ safe_query | urlencode }}"><img src="https://www.svgrepo.com/show/353679/duckduckgo.svg" alt="DuckDuckGo"></a>
                 </div>
             </div>
         {% endif %}
     </div>
 
-    <footer class="text-center py-4 text-gray-600 no-select">
-        Powered by BerkutSolutions
-    </footer>
+    <footer>Powered by BerkutSolutions</footer>
 </body>
 </html>
