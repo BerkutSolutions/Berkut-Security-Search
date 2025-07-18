@@ -9,222 +9,511 @@
     <title>Berkut Security Search</title>
     <link rel="icon" type="image/svg+xml" href="https://www.svgrepo.com/show/532553/search.svg">
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            background-color: #1a202c;
-            color: #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            flex-grow: 1;
-        }
-        h1 {
-            text-align: center;
-            color: #e5e7eb;
-            margin-bottom: 20px;
-        }
-        form {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            max-width: 36rem; /* 576px, фиксированная ширина */
-            width: 36rem; /* Фиксированная ширина */
-            margin-left: auto;
-            margin-right: auto;
-        }
-        input[type="text"] {
-            padding: 10px;
-            border: 1px solid #4b5563;
-            border-radius: 4px 0 0 4px;
-            background-color: #2d3748;
-            color: #e2e8f0;
-            font-size: 16px;
-            width: 28rem; /* Фиксированная ширина поля ввода, оставляя место для кнопки */
-            box-sizing: border-box;
-        }
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 0 4px 4px 0;
-            background-color: #3182ce;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #2b6cb0;
-        }
-        .progress-container {
-            text-align: center;
-            margin-bottom: 20px;
-            max-width: 36rem; /* 576px, фиксированная ширина */
-            width: 36rem; /* Фиксированная ширина */
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .progress-text {
-            display: none;
-            color: #a0aec0;
-        }
-        progress {
-            width: 100%;
-            height: 10px;
-            display: none;
-        }
-        .warning {
-            background-color: rgba(229, 62, 62, 0.2);
-            padding: 15px;
-            border-radius: 4px;
-            color: #feb2b2;
-            margin-bottom: 20px;
-            max-width: 36rem; /* 576px, фиксированная ширина */
-            width: 36rem; /* Фиксированная ширина */
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .safe {
-            background-color: rgba(56, 161, 105, 0.2);
-            padding: 15px;
-            border-radius: 4px;
-            color: #22c55e;
-            margin-bottom: 20px;
-            text-align: center;
-            max-width: 36rem; /* 576px, фиксированная ширина */
-            width: 36rem; /* Фиксированная ширина */
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .safe a {
-            margin: 0 10px;
-            text-decoration: none;
-        }
-        .safe img {
-            width: 24px;
-            height: 24px;
-            vertical-align: middle;
-        }
-        footer {
-            text-align: center;
-            padding: 10px;
-            color: #a0aec0;
-            user-select: none;
-        }
-        mark {
-            background-color: #fef08a; /* Жёлтый фон для выделения */
-            color: #1a202c;
-            padding: 0 2px;
-            border-radius: 2px;
-        }
-        details {
-            margin-bottom: 1rem;
-            max-width: 36rem; /* 576px, фиксированная ширина */
-            width: 36rem; /* Фиксированная ширина */
-        }
-        summary {
-            cursor: pointer;
-            font-weight: 500;
-            color: #e2e8f0;
-            padding: 10px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        details[open] summary {
-            color: #e5e7eb;
-        }
-        .warning-text {
-            padding: 10px;
-            max-width: 36rem; /* 576px, фиксированная ширина */
-            width: 36rem; /* Фиксированная ширина */
-            box-sizing: border-box;
-        }
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif;background:linear-gradient(to bottom,#1a202c,#2a4365);color:#e2e8f0;margin:0;padding:20px;min-height:100vh;display:flex;flex-direction:column;position:relative;}
+.main-container{display:flex;gap:20px;max-width:1200px;width:100%;margin:0 auto;flex:1;}
+.db-path-visible{display:block;}
+input#db_path,input#init_db_path{display:none;}
+.left-column{width:200px;padding:10px;}
+.center-column{flex:1;padding:10px;}
+.right-column{width:300px;padding:10px;}
+h1{text-align:center;color:#e5e7eb;margin-bottom:20px;}
+.left-menu-button{padding:10px;background-color:#2f4f4f;color:white;border:none;border-radius:4px;cursor:pointer;margin-bottom:15px;}
+.left-menu-button:hover{background-color:#3c6060;}
+.tiles{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px;}
+.tile{background-color:#2d3748;color:#e2e8f0;padding:15px;text-align:center;border-radius:4px;text-decoration:none;font-size:14px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;display:flex;align-items:center;justify-content:center;gap:10px;}
+.tile img{width:16px;height:16px;vertical-align:middle;}
+.tile:hover{background-color:#4a5568;}
+.debug-tiles{margin:10px 0;padding:10px;background-color:#f8f9fa;border:1px solid #dee2e6;color:#1a202c;}
+.search-container{display:flex;align-items:center;gap:10px;margin-bottom:20px;position:relative;min-width:350px;}
+input[type="text"]{padding:10px;border:1px solid #4b5563;border-radius:4px 0 0 4px;background-color:#2d3748;color:#e2e8f0;font-size:16px;flex:1;}
+button{padding:10px 20px;border:none;border-radius:4px;background-color:#2f4f4f;color:white;cursor:pointer;}
+button:hover{background-color:#3c6060;}
+.search-button{border-radius:0 4px 4px 0;margin-left:-5px;}
+.update-db-button{border-radius:4px;}
+.warning{background-color:rgba(229,62,62,0.2);padding:10px;border-radius:4px;color:#feb2b2;margin-bottom:20px;}
+.warning-header{font-weight:600;margin-bottom:8px;}
+.warning-buttons{display:flex;flex-wrap:wrap;gap:8px;}
+.warning-btn{padding:4px 10px;font-size:14px;line-height:1.2;border:1px solid #feb2b2;background:rgba(229,62,62,0.3);color:#feb2b2;border-radius:4px;cursor:pointer;transition:background .15s;}
+.warning-btn:hover{background:rgba(229,62,62,0.5);}
+.safe{background-color:rgba(56,161,105,0.2);padding:10px;border-radius:4px;color:#22c55e;margin-bottom:20px;text-align:center;}
+.safe a{margin:0 10px;text-decoration:none;}
+.safe img{width:24px;height:24px;vertical-align:middle;}
+.footer{text-align:center;padding:5px;color:#a0aec0;width:100%;max-width:1200px;margin:0 auto;position:fixed;bottom:0;left:50%;transform:translateX(-50%);background:transparent;z-index:100;display:flex;justify-content:space-between;}
+.footer-column{flex:1;padding:0 10px;}
+.footer-column:first-child{flex:1;}
+.footer-column:nth-child(2){flex:3;text-align:center;user-select:none;}
+.footer-column:last-child{flex:1;display:flex;justify-content:flex-end;}
+mark{background-color:#fef08a;color:#1a202c;padding:0 2px;border-radius:2px;}
+.ip-info{font-size:14px;color:#e2e8f0;}
+.ip-info h3{color:#e5e7eb;margin-bottom:10px;}
+.map-container{margin-top:20px;}
+.map-container iframe{width:100%;height:400px;border:none;}
+.modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);z-index:1000;padding:20px;overflow-y:auto;}
+.modal-backdrop.show{display:flex;}
+.modal{max-width:900px;width:100%;background:#2d3748;color:#e2e8f0;padding:20px;border-radius:8px;box-shadow:0 0 0 1px rgba(255,255,255,.1),0 10px 40px rgba(0,0,0,.7);position:relative;}
+.modal h2{margin-top:0;margin-bottom:10px;color:#feb2b2;font-size:18px;}
+.modal-content{max-height:70vh;overflow-y:auto;font-size:15px;line-height:1.35;}
+.modal-meta{font-size:13px;color:#a0aec0;margin-bottom:10px;}
+.modal-content pre{white-space:pre-wrap;word-break:break-word;font-family:inherit;margin:0;}
+.context-menu{display:none;position:absolute;background-color:#2d3748;border:1px solid #4b5563;box-shadow:0 0 0 1px rgba(255,255,255,.1),0 10px 40px rgba(0,0,0,.7);z-index:1000;}
+.context-menu div{padding:8px 12px;color:#e2e8f0;cursor:pointer;}
+.context-menu div:hover{background-color:#4a5568;}
+.add-modal{max-width:400px;width:100%;background:#2d3748;color:#e2e8f0;padding:20px;border-radius:8px;box-shadow:0 0 0 1px rgba(255,255,255,.1),0 10px 40px rgba(0,0,0,.7);position:relative;}
+.add-modal input{padding:10px;border:1px solid #4b5563;border-radius:4px;background-color:#2d3748;color:#e2e8f0;font-size:14px;width:100%;margin-bottom:10px;box-sizing:border-box;display:block;}
+.add-modal button[type="submit"]{padding:10px;background-color:#2f4f4f;color:white;border:none;border-radius:4px;cursor:pointer;width:100%;box-sizing:border-box;display:block;}
+.add-modal button[type="submit"]:hover{background-color:#3c6060;}
+.add-tile-form{display:flex;flex-direction:column;gap:10px;}
+.history-list{background-color:#2d3748;border:1px solid #4b5563;border-radius:4px;max-height:150px;overflow-y:auto;position:absolute;width:360px;min-width:360px;z-index:1001;display:none;top:100%;left:0;transform:translateX(0);margin-top:2px;}
+.history-list div{padding:8px;cursor:pointer;color:#e2e8f0;}
+.history-list div:hover{background-color:#4a5568;}
+.notification{background-color:rgba(229,62,62,0.2);padding:10px;border-radius:4px;color:#feb2b2;margin-top:10px;font-size:14px;}
+.notification button{margin-top:8px;padding:8px 16px;background-color:#2f4f4f;color:white;border:none;border-radius:4px;cursor:pointer;}
+.notification button:hover{background-color:#3c6060;}
+.settings-modal{max-width:400px;width:100%;background:#2d3748;color:#e2e8f0;padding:20px;border-radius:8px;box-shadow:0 0 0 1px rgba(255,255,255,.1),0 10px 40px rgba(0,0,0,.7);position:relative;}
+.settings-modal select,.settings-modal input[type="text"]{padding:10px;border:1px solid #4b5563;border-radius:4px;background-color:#2d3748;color:#e2e8f0;font-size:14px;width:100%;margin-bottom:10px;box-sizing:border-box;display:block;}
+.settings-modal button{padding:10px;background-color:#2f4f4f;color:white;border:none;border-radius:4px;cursor:pointer;width:100%;margin-bottom:15px;}
+.settings-modal button:hover{background-color:#3c6060;}
+.settings-modal .cancel-btn{background-color:#4b5563;}
+.settings-modal .cancel-btn:hover{background-color:#5c6b7b;}
+.delete-modal{max-width:400px;width:100%;background:#2d3748;color:#e2e8f0;padding:20px;border-radius:8px;box-shadow:0 0 0 1px rgba(255,255,255,.1),0 10px 40px rgba(0,0,0,.7);position:relative;}
+.delete-modal button{padding:10px;background-color:#2f4f4f;color:white;border:none;border-radius:4px;cursor:pointer;margin:5px;}
+.delete-modal button:hover{background-color:#3c6060;}
+.delete-modal .cancel-btn{background-color:#4b5563;}
+.delete-modal .cancel-btn:hover{background-color:#5c6b7b;}
+.success-notification{position:fixed;bottom:20px;right:20px;background-color:rgba(56,161,105,0.9);color:#e2e8f0;padding:10px 20px;border-radius:4px;z-index:2000;display:none;font-size:14px;}
+.success-notification.show{display:block;}
+.update-modal{max-width:400px;width:100%;background:#2d3748;color:#e2e8f0;padding:20px;border-radius:8px;box-shadow:0 0 0 1px rgba(255,255,255,.1),0 10px 40px rgba(0,0,0,.7);position:relative;}
+.init-modal{max-width:400px;width:100%;background:#2d3748;color:#e2e8f0;padding:20px;border-radius:8px;box-shadow:0 0 0 1px rgba(255,255,255,.1),0 10px 40px rgba(0,0,0,.7);position:relative;}
+.init-modal select,.init-modal input[type="text"]{padding:10px;border:1px solid #4b5563;border-radius:4px;background-color:#2d3748;color:#e2e8f0;font-size:14px;width:100%;margin-bottom:10px;box-sizing:border-box;display:block;}
+.init-modal button{padding:10px;background-color:#2f4f4f;color:white;border:none;border-radius:4px;cursor:pointer;width:100%;margin-bottom:15px;}
+.init-modal button:hover{background-color:#3c6060;}
+.init-modal .cancel-btn{background-color:#4b5563;}
+.init-modal .cancel-btn:hover{background-color:#5c6b7b;}
+.search-input { width: 350px; padding: 8px; }
     </style>
     <script>
+        let isDeleting = false;
+        function escapeRegExp(str) { return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+        function highlightQuery(html, query) {
+            if (!query) return html;
+            try {
+                const pattern = new RegExp('(' + escapeRegExp(query) + ')', 'gi');
+                return html.replace(pattern, '<mark>$1</mark>');
+            } catch (e) {
+                console.error('highlight regex error', e);
+                return html;
+            }
+        }
+        function openModal(materialId) {
+            const backdrop = document.getElementById('modal-backdrop');
+            const titleEl = document.getElementById('modal-title');
+            const metaEl = document.getElementById('modal-meta');
+            const contentEl = document.getElementById('modal-body');
+            const hiddenEl = document.getElementById('material-' + materialId);
+            if (!hiddenEl) { console.warn('no material element', materialId); return; }
+            const rawText = hiddenEl.innerHTML;
+            const date = hiddenEl.getAttribute('data-date');
+            const q = backdrop.getAttribute('data-query');
+            titleEl.textContent = '№ ' + materialId;
+            metaEl.textContent = 'Дата: ' + (date || 'Не указана');
+            contentEl.innerHTML = highlightQuery(rawText, q);
+            backdrop.classList.add('show');
+            document.getElementById('modal-close').focus();
+        }
+        function closeModal() {
+            document.getElementById('modal-backdrop').classList.remove('show');
+            document.getElementById('add-modal').classList.remove('show');
+            document.getElementById('delete-modal').classList.remove('show');
+            document.getElementById('settings-modal').classList.remove('show');
+            document.getElementById('success-notification').classList.remove('show');
+            document.getElementById('update-modal').classList.remove('show');
+            document.getElementById('init-modal').classList.remove('show');
+        }
+        let currentTile = null;
+        function showContextMenu(event, name, url) {
+            event.preventDefault();
+            currentTile = { name, url };
+            const menu = document.getElementById('context-menu');
+            menu.style.display = 'block';
+            menu.style.left = event.pageX + 'px';
+            menu.style.top = event.pageY + 'px';
+        }
+        function openAddModal() {
+            document.getElementById('modal-title-add').textContent = 'Добавить сайт';
+            document.getElementById('site_name').value = '';
+            document.getElementById('site_url').value = 'https://';
+            document.getElementById('edit_index').value = '';
+            document.getElementById('edit_url').value = '';
+            document.getElementById('add-modal').classList.add('show');
+            document.getElementById('site_name').focus();
+        }
+        function openEditModal() {
+            document.getElementById('modal-title-add').textContent = 'Редактировать сайт';
+            document.getElementById('site_name').value = currentTile.name;
+            document.getElementById('site_url').value = currentTile.url;
+            document.getElementById('edit_index').value = currentTile.name;
+            document.getElementById('edit_url').value = currentTile.url;
+            document.getElementById('add-modal').classList.add('show');
+            document.getElementById('context-menu').style.display = 'none';
+            document.getElementById('site_name').focus();
+        }
+        function openDeleteModal() {
+            document.getElementById('modal-title-delete').textContent = 'Удалить сайт';
+            document.getElementById('delete-site-name').textContent = currentTile.name;
+            document.getElementById('delete_tile').value = currentTile.name;
+            document.getElementById('delete_url').value = currentTile.url;
+            document.getElementById('delete-modal').classList.add('show');
+            document.getElementById('context-menu').style.display = 'none';
+        }
+        function deleteTile(event) {
+            event.preventDefault();
+            if (isDeleting) return;
+            isDeleting = true;
+            const formData = new FormData();
+            formData.append('delete_tile', currentTile.name);
+            formData.append('delete_url', currentTile.url);
+            fetch('/', {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+                isDeleting = false;
+                if (response.ok) {
+                    const notification = document.getElementById('success-notification');
+                    notification.textContent = 'Плитка успешно удалена';
+                    notification.classList.add('show');
+                    setTimeout(() => { notification.classList.remove('show'); location.reload(); }, 300);
+                } else {
+                    response.text().then(text => {
+                        console.error('Server response:', text);
+                        alert('Ошибка при удалении сайта: ' + (text || 'Неизвестная ошибка'));
+                    });
+                }
+            }).catch(error => {
+                isDeleting = false;
+                console.error('Ошибка удаления:', error);
+                alert('Ошибка при удалении сайта: ' + error.message);
+            });
+            document.getElementById('delete-modal').classList.remove('show');
+        }
+        function saveSearchHistory(query) {
+            if (!query) return;
+            let history = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+            history = history.filter(q => q !== query);
+            history.unshift(query);
+            if (history.length > 5) history.pop();
+            localStorage.setItem('searchHistory', JSON.stringify(history));
+            updateHistoryList();
+        }
+        function updateHistoryList() {
+            const historyList = document.getElementById('history-list');
+            const history = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+            historyList.innerHTML = '';
+            history.forEach(query => {
+                const div = document.createElement('div');
+                div.textContent = query;
+                div.onclick = () => { document.getElementById('query').value = query; historyList.style.display = 'none'; };
+                historyList.appendChild(div);
+            });
+        }
+        function exportTiles() {
+            fetch('/export-tiles')
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'tiles.json';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                });
+        }
+        function importTiles(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const tiles = JSON.parse(e.target.result);
+                        fetch('/import-tiles', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(tiles) }).then(() => location.reload());
+                    } catch (err) { alert('Ошибка: Неверный формат файла tiles.json'); }
+                };
+                reader.readAsText(file);
+            }
+        }
+        function openSettingsModal() {
+            document.getElementById('modal-backdrop').classList.remove('show');
+            document.getElementById('add-modal').classList.remove('show');
+            document.getElementById('delete-modal').classList.remove('show');
+            document.getElementById('settings-modal').classList.add('show');
+        }
+        function saveSettings() {
+            const dbSource = document.getElementById('db_source').value;
+            const dbPath = document.getElementById('db_path').value;
+            fetch('/update-settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'db_source=' + encodeURIComponent(dbSource) + (dbSource === 'local_csv' ? '&db_path=' + encodeURIComponent(dbPath) : '')
+            }).then(response => {
+                if (response.ok) {
+                    fetch('/clear-history').then(() => {
+                        localStorage.removeItem('searchHistory');
+                        updateHistoryList();
+                        const notification = document.getElementById('success-notification');
+                        notification.textContent = 'Настройки успешно сохранены';
+                        notification.classList.add('show');
+                        setTimeout(() => { notification.classList.remove('show'); }, 2000);
+                        document.getElementById('settings-modal').classList.remove('show');
+                    });
+                } else {
+                    response.text().then(text => { alert('Ошибка сохранения настроек: ' + (text || 'Неизвестная ошибка')); });
+                }
+            }).catch(error => { alert('Ошибка при сохранении настроек: ' + error.message); });
+        }
+        function initDatabase() {
+            const dbSource = document.getElementById('init_db_source').value;
+            const dbPath = document.getElementById('init_db_path').value;
+            fetch('/init-database', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'db_source=' + encodeURIComponent(dbSource) + (dbSource === 'local_csv' ? '&db_path=' + encodeURIComponent(dbPath) : '')
+            }).then(response => {
+                if (response.ok) {
+                    const notification = document.getElementById('success-notification');
+                    notification.textContent = 'База данных успешно инициализирована';
+                    notification.classList.add('show');
+                    setTimeout(() => { notification.classList.remove('show'); location.assign('/'); }, 2000);
+                    document.getElementById('init-modal').classList.remove('show');
+                } else {
+                    response.text().then(text => { alert('Ошибка инициализации базы: ' + (text || 'Неизвестная ошибка')); });
+                }
+            }).catch(error => { alert('Ошибка при инициализации базы: ' + error.message); });
+        }
         document.addEventListener('DOMContentLoaded', () => {
-            const progressBar = document.getElementById('progress-bar');
-            const progressText = document.getElementById('progress-text');
-            const searchForm = document.getElementById('search-form');
-            const queryInput = document.getElementById('query');
-
-            searchForm.addEventListener('submit', () => {
-                const query = queryInput.value;
-                if (query) {
-                    progressText.style.display = 'block';
-                    progressBar.style.display = 'block';
-                    const source = new EventSource(`/progress/${encodeURIComponent(query)}`);
-                    source.onmessage = (event) => {
-                        const data = JSON.parse(event.data);
-                        progressBar.value = data.progress;
-                        if (data.progress >= 100) {
-                            source.close();
-                            if (!data.found) {
-                                progressText.textContent = 'Поиск завершён!';
-                            }
-                        }
-                    };
-                    source.onerror = () => {
-                        source.close();
-                        progressText.textContent = 'Ошибка при проверке!';
-                    };
+            const query = "{{ query | safe }}";
+            const backdrop = document.getElementById('modal-backdrop');
+            backdrop.setAttribute('data-query', query);
+            const tiles = document.querySelectorAll('.tile');
+            tiles.forEach(tile => {
+                const url = tile.getAttribute('href');
+                if (url) {
+                    try {
+                        const faviconUrl = `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=16`;
+                        const img = document.createElement('img');
+                        img.src = faviconUrl;
+                        tile.prepend(img);
+                    } catch (err) { console.error(err); }
                 }
             });
-
-            // Подсветка ключевых слов
-            const query = "{{ query | safe }}";
-            if (query) {
-                const warningElements = document.querySelectorAll('.warning-text');
-                warningElements.forEach(element => {
-                    const regex = new RegExp(`(${query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')})`, 'gi');
-                    element.innerHTML = element.innerHTML.replace(regex, '<mark>$1</mark>');
-                });
-            }
+            const queryInput = document.getElementById('query');
+            const historyList = document.getElementById('history-list');
+            updateHistoryList();
+            queryInput.addEventListener('focus', () => {
+                if (JSON.parse(localStorage.getItem('searchHistory') || '[]').length > 0) {
+                    historyList.style.display = 'block';
+                }
+            });
+            queryInput.addEventListener('blur', () => {
+                setTimeout(() => historyList.style.display = 'none', 200);
+            });
+            document.getElementById('search-form').addEventListener('submit', () => {
+                saveSearchHistory(queryInput.value);
+            });
+            document.getElementById('settings-button').addEventListener('click', openSettingsModal);
+            document.getElementById('settings-modal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('settings-modal')) closeModal();
+            });
+            document.getElementById('modal-backdrop').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('modal-backdrop')) closeModal();
+            });
+            document.getElementById('add-modal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('add-modal')) closeModal();
+            });
+            document.getElementById('delete-modal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('delete-modal')) closeModal();
+            });
+            document.getElementById('update-modal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('update-modal')) closeModal();
+            });
+            document.getElementById('init-modal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('init-modal')) closeModal();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeModal();
+            });
+            document.addEventListener('click', function(event) {
+                const menu = document.getElementById('context-menu');
+                if (!menu.contains(event.target)) {
+                    menu.style.display = 'none';
+                }
+            });
+            document.getElementById('db_source').addEventListener('change', function() {
+                document.getElementById('db_path').style.display = this.value === 'local_csv' ? 'block' : 'none';
+            });
+            document.getElementById('init_db_source').addEventListener('change', function() {
+                document.getElementById('init_db_path').style.display = this.value === 'local_csv' ? 'block' : 'none';
+            });
         });
     </script>
 </head>
 <body>
-    <div class="container">
-        <h1>Berkut Security Search</h1>
-        
-        <form id="search-form" method="POST" action="/">
-            <input type="text" id="query" name="query" placeholder="Введите запрос..." required>
-            <button type="submit">Поиск</button>
-        </form>
-
-        <div class="progress-container">
-            <p id="progress-text" class="progress-text">Поиск выполняется...</p>
-            <progress id="progress-bar" value="0" max="100"></progress>
+    <div class="main-container">
+        <div class="left-column">
+            <button class="left-menu-button" onclick="openAddModal()">Добавить сайт</button>
+            <button class="left-menu-button" onclick="exportTiles()">Экспорт плиток</button>
+            <button class="left-menu-button">
+                <input type="file" accept=".json" style="display: none;" onchange="importTiles(event)">
+                <span style="display: block; text-align: center;">Импорт плиток</span>
+            </button>
         </div>
-
-        {% if warning %}
-            <div class="warning">
-                <p><strong>Найдены запрещённые материалы:</strong></p>
-                {% for material_id, date, material_text in warning %}
-                    <details>
-                        <summary>Найдено упоминание в записи № {{ material_id }}</summary>
-                        <p class="warning-text">ID: {{ material_id }}, Дата: {{ date }}<br>Причина: {{ material_text | safe }}</p>
-                    </details>
-                {% endfor %}
+        <div class="center-column">
+            <h1>Berkut Security Search</h1>
+            <div class="tiles">
+                {% if tiles %}
+                    {% for tile in tiles %}
+                        <a href="{{ tile.url }}" class="tile" oncontextmenu="showContextMenu(event, '{{ tile.name }}', '{{ tile.url }}')">{{ tile.name }}</a>
+                    {% endfor %}
+                {% else %}
+                    <p class="debug-tiles">Плитки отсутствуют. Проверьте tiles.json или логи.</p>
+                {% endif %}
             </div>
-        {% endif %}
-
-        {% if safe_query %}
-            <div class="safe">
-                Запрос "{{ safe_query }}" безопасен!
-                <div>
-                    <a href="https://www.google.com/search?q={{ safe_query | urlencode }}"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg" alt="Google"></a>
-                    <a href="https://yandex.com/search/?text={{ safe_query | urlencode }}"><img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Yandex_icon.svg" alt="Yandex"></a>
-                    <a href="https://duckduckgo.com/?q={{ safe_query | urlencode }}"><img src="https://www.svgrepo.com/show/353679/duckduckgo.svg" alt="DuckDuckGo"></a>
+            <div class="search-container">
+                <form id="search-form" method="POST" action="/" style="display: inline-block;">
+                    <input type="text" id="query" name="query" placeholder="Введите запрос..." required class="search-input" style="border-radius: 3px;">
+                    <button type="submit" style="margin-left: 3px;">Поиск</button>
+                </form>
+                <form id="update-db-form" method="POST" action="/update-db" style="display: inline-block;">
+                    <button type="submit" class="update-db-button">Обновить базу</button>
+                </form>
+                <div id="history-list" class="history-list"></div>
+            </div>
+            {% if error %}
+                <div class="notification">Ошибка: {{ error }}</div>
+            {% endif %}
+            {% if warning %}
+                <div class="warning">
+                    <div class="warning-header">Найдены запрещённые материалы:</div>
+                    <div class="warning-buttons">
+                        {% for material_id, date, material_text in warning %}
+                            <button type="button" class="warning-btn" onclick="openModal('{{ material_id }}')">№ {{ material_id }}</button>
+                        {% endfor %}
+                    </div>
+                    {% for material_id, date, material_text in warning %}
+                        <div id="material-{{ material_id }}" data-date="{{ date }}" style="display:none;">ID: {{ material_id }}, Дата: {{ date }}<br>Причина: {{ material_text | safe }}</div>
+                    {% endfor %}
                 </div>
+            {% endif %}
+            {% if safe_query %}
+                <div class="safe">
+                    Запрос "{{ safe_query }}" безопасен!
+                    <div>
+                        <a href="https://www.google.com/search?q={{ safe_query | urlencode }}"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Google_Favicon_2025.svg" alt="Google"></a>
+                        <a href="https://yandex.com/search/?text={{ safe_query | urlencode }}"><img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Yandex_icon.svg" alt="Yandex"></a>
+                        <a href="https://duckduckgo.com/?q={{ safe_query | urlencode }}"><img src="https://www.svgrepo.com/show/353679/duckduckgo.svg" alt="DuckDuckGo"></a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="right-column">
+            <h3>Информация</h3>
+            <div class="ip-info">
+                <p><strong>IP:</strong> {{ ip_info.ip }}</p>
+                <p><strong>Страна:</strong> {{ ip_info.country }}</p>
+                {% if ip_info.city %}
+                    <p><strong>Город:</strong> {{ ip_info.city }}</p>
+                {% endif %}
             </div>
-        {% endif %}
+            <div class="map-container">{{ map_html | safe }}</div>
+            {% if update_info and update_info.updated %}
+                <div id="update-modal" class="modal-backdrop show" role="dialog" aria-modal="true" aria-labelledby="modal-title-update">
+                    <div class="update-modal" role="document">
+                        <h2 id="modal-title-update">База данных обновлена</h2>
+                        <p>Добавлено новых записей: {{ update_info.new_records }}</p>
+                        <button type="button" onclick="window.location.assign('/')">Закрыть и вернуться</button>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
     </div>
-
-    <footer>Powered by BerkutSolutions</footer>
+    <div class="footer">
+        <div class="footer-column"></div>
+        <div class="footer-column">Powered by BerkutSolutions</div>
+        <div class="footer-column"><button id="settings-button" class="left-menu-button" onclick="openSettingsModal()">Настройки</button></div>
+    </div>
+    <div id="modal-backdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal" role="document">
+            <h2 id="modal-title"></h2>
+            <div id="modal-meta" class="modal-meta"></div>
+            <div id="modal-body" class="modal-content"></div>
+            <button id="modal-close" onclick="closeModal()">Закрыть</button>
+        </div>
+    </div>
+    <div id="add-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title-add">
+        <div class="add-modal" role="document">
+            <h2 id="modal-title-add"></h2>
+            <form method="POST" action="/" class="add-tile-form">
+                <input type="text" id="site_name" name="site_name" placeholder="Название сайта" required>
+                <input type="url" id="site_url" name="site_url" placeholder="URL сайта" value="https://" required>
+                <input type="hidden" id="edit_index" name="edit_index">
+                <input type="hidden" id="edit_url" name="edit_url">
+                <button type="submit" name="add_tile">Сохранить</button>
+            </form>
+        </div>
+    </div>
+    <div id="delete-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title-delete">
+        <div class="delete-modal" role="document">
+            <h2 id="modal-title-delete"></h2>
+            <p>Вы уверены, что хотите удалить сайт "<span id="delete-site-name"></span>"?</p>
+            <form method="POST" action="/" class="add-tile-form">
+                <input type="hidden" id="delete_tile" name="delete_tile">
+                <input type="hidden" id="delete_url" name="delete_url">
+                <button type="button" onclick="deleteTile(event)">Удалить</button>
+                <button type="button" class="cancel-btn" onclick="closeModal()">Отмена</button>
+            </form>
+        </div>
+    </div>
+    <div id="settings-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title-settings">
+        <div class="settings-modal" role="document">
+            <h2 id="modal-title-settings">Настройки</h2>
+            <form class="add-tile-form" action="/update-settings" method="POST">
+                <select id="db_source" name="db_source">
+                    <option value="txt" {% if settings.get('db_source') == 'txt' %}selected{% endif %}>Локальный TXT (fs_em.txt)</option>
+                    <option value="local_csv" {% if settings.get('db_source') == 'local_csv' %}selected{% endif %}>Локальный CSV (fs_em.csv)</option>
+                    <option value="remote_csv" {% if settings.get('db_source') == 'remote_csv' %}selected{% endif %}>Удалённый CSV (minjust.gov.ru)</option>
+                </select>
+                <input type="text" id="db_path" name="db_path" placeholder="Путь к локальному CSV" class="{% if settings.get('db_source') == 'local_csv' %}db-path-visible{% endif %}" value="{{ settings.get('db_path', '') | safe }}">
+                <button type="submit">Сохранить настройки</button>
+                <button type="button" onclick="saveSettings()">Очистить историю поиска</button>
+                <button type="button" class="cancel-btn" onclick="closeModal()">Отмена</button>
+            </form>
+        </div>
+    </div>
+    <div id="init-modal" class="modal-backdrop" {% if show_init_modal %}class="show"{% endif %} role="dialog" aria-modal="true" aria-labelledby="modal-title-init">
+        <div class="init-modal" role="document">
+            <h2 id="modal-title-init">Инициализация базы данных</h2>
+            <p>База данных отсутствует или пуста. Выберите источник для инициализации:</p>
+            <form class="add-tile-form" action="/init-database" method="POST">
+                <select id="init_db_source" name="db_source">
+                    <option value="txt">Локальный TXT (fs_em.txt)</option>
+                    <option value="local_csv">Локальный CSV (fs_em.csv)</option>
+                    <option value="remote_csv">Удалённый CSV (minjust.gov.ru)</option>
+                </select>
+                <input type="text" id="init_db_path" name="db_path" placeholder="Путь к локальному CSV" class="{% if settings.get('db_source') == 'local_csv' %}db-path-visible{% endif %}" value="./fs_em.csv">
+                <button type="button" onclick="initDatabase()">Инициализировать</button>
+                <button type="button" class="cancel-btn" onclick="closeModal()">Отмена</button>
+            </form>
+        </div>
+    </div>
+    <div id="success-notification" class="success-notification"></div>
+    <div id="context-menu" class="context-menu">
+        <div onclick="openEditModal()">Редактировать</div>
+        <div onclick="openDeleteModal()">Удалить</div>
+    </div>
+    <div id="update-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title-update">
+        <div class="update-modal" role="document">
+            <h2 id="modal-title-update">База данных обновлена</h2>
+            <p>Добавлено новых записей: {{ update_info.new_records }}</p>
+            <button type="button" onclick="window.location.assign('/')">Закрыть и вернуться</button>
+        </div>
+    </div>
 </body>
 </html>
